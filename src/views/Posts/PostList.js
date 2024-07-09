@@ -9,7 +9,6 @@ import Post from './Post';
 const useStyles = makeStyles(theme => ({
   root: {
 	height: '100%',
-	minHeight: 'calc(100vh - 123px)',
 	alignItems: 'center',
 	justifyContent: 'center',
 	padding: '0px !important',
@@ -25,9 +24,9 @@ export default function PostList (props) {
 	
 	const classes = useStyles();
 		
+	console.log('props.posts:  ',props.posts);
 	return (
 		<div className={classes.root}>
-		console.log('props.posts:  ',props.posts);
 			{props.posts?
 				(props.posts.map((item, i) => {
 					return <Post post={item} key={i}

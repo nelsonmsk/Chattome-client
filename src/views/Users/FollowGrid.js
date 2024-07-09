@@ -6,9 +6,7 @@ import {GridList, GridListTile, Button, Avatar, Typography} from '@material-ui/c
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: theme.spacing(4),
 	height: '50%',
-	minHeight: 'calc(100vh - 123px)',
 	alignItems: 'center',
 	justifyContent: 'center',
 	padding: '0px !important',
@@ -24,7 +22,7 @@ export default function FollowGrid (props) {
 			{props.people?
 				(props.people.map((person, i) => {
 					return <GridListTile style={{'height':120}} key={i}>
-						<Link to={"/user/" + person._id}>
+						<Link to={"/users/" + person._id}>
 							<Avatar src={'/api/users/photo/'+person._id}
 								className={classes.bigAvatar}/>
 							<Typography className={classes.tileText}>

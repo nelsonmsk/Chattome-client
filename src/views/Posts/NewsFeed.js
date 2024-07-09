@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Link, Navigate} from 'react-router-dom';
+import {Link, Navigate, redirect} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -38,7 +38,7 @@ const classes = useStyles();
 	useEffect(() => {
 		const abortController = new AbortController();
 		const signal = abortController.signal;
-		const jwt = auth.isAuthenticated;
+		const jwt = auth.isAuthenticated();
 		
 		listNewsFeed({
 			userId: jwt.user._id
@@ -68,7 +68,7 @@ const classes = useStyles();
 	};
 
 	if (redirectToSignin) {
-		return <Navigate to='/signin'/>
+		return redirect('/signin');
 	};
 	
 	return (
@@ -78,7 +78,7 @@ const classes = useStyles();
 			</Typography>
 			<Card>
 				<Divider/>
-					<NewPost addUpdate={addPost}/>
+				<NewPost addUpdate={addPost}/>
 				<Divider/>
 				<PostList removeUpdate={removePost} posts={posts}/>
 			</Card>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import {Link, 	Navigate} from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import {Link, Navigate, useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -15,6 +15,7 @@ import {read} from './api-user';
 import {listByUser} from './../Posts/api-post';
 import DeleteUser from './DeleteUser';
 import ProfileTabs from './ProfileTabs'; 
+import FollowProfileButton from './FollowProfileButton';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,52 +29,70 @@ const useStyles = makeStyles(theme => ({
 
 export default function Profile({ match }) {
 	const classes = useStyles();
-	const [user, setUser] = useState({});
-	const [posts, setPosts] = useState({});
+	const [user, setUser] = useState([]);
+	const [posts, setPosts] = useState([]);
 	const [redirectToSignin, setRedirectToSignin] = useState(false);
-
-	const [values, setValues] = useState({
-		name: '',
-		password: '',
-		email: '',
-		open: false,
-		error: ''
-	});
-
+	const [following, setFollowing] = useState(false);
+	const {userId} = useParams();
 	
 	useEffect(() => {
-		const abortController = new AbortController()
+		const abortController = new AbortController();
 		const signal = abortController.signal;
-		const jwt = auth.isAuthenticated;
+		const jwt = auth.isAuthenticated();
+		const userId = jwt.user._id;
+		console.log('userId:',userId);
+		//let follow = true;
 		read({
-			userId: match.params.userId
+			userId: userId
 		}, {t: jwt.token}, signal).then((data) => {
 			if (data && data.error) {
 				setRedirectToSignin(true);
 			} else {
-				setUser(data);
+				console.log('user-read:', data);
+				setUser(data);		
+				setFollowing(true);
+			}
+		});
+	}, []);  
+
+
+	useEffect(() => {
+		const abortController = new AbortController();
+		const signal = abortController.signal;
+		const jwt = auth.isAuthenticated();
+
+		listByUser({
+			userId: userId
+		}, {
+			t: jwt.token
+		},signal).then((data) => {
+			if (data && data.error) {
+				console.log(data.error);
+			} else {
+				console.log('posts-data-By-user:',data);
+				setPosts(data);
 			}
 		});
 		return function cleanup(){
 			abortController.abort();
-		}
-	}, [match.params.userId]);
+		};
+	}, []); 
 
-
-	const loadPosts = (user) => {
-	const jwt = auth.isAuthenticated;
-		listByUser({
-			userId: user
-		}, {
-			t: jwt.token
-		}).then((data) => {
-			if (data.error) {
-				console.log(data.error);
-			} else {
-				setPosts(data);
-			}
-		})
-	};			
+	const clickFollowButton = (callApi) => {
+		const jwt = auth.isAuthenticated();
+		callApi({
+				userId: jwt.user._id
+			}, {
+				t: jwt.token
+			}, user._id).then((data) => {
+				if ( data && data.error) {
+					console('error:', data.error);
+				} else {
+					setUser(data);		
+					setFollowing(!following);
+				}
+			});
+	};
 
 	const removePost = (post) => {
 		const updatedPosts = [...posts];
@@ -86,8 +105,8 @@ export default function Profile({ match }) {
 		return <Navigate to='/signin'/>
 	};
 	
-	const photoUrl = values.user._id
-	? `/api/users/photo/${values.user._id}?${new Date().getTime()}`
+	const photoUrl = userId
+	? `/api/users/photo/${userId}?${new Date().getTime()}`
 	: '/api/users/defaultphoto'	;
 	
 	return (
@@ -103,7 +122,7 @@ export default function Profile({ match }) {
 						</Avatar>
 					</ListItemAvatar>
 					<ListItemText primary={user.name} secondary={user.email}/>
-				{( auth.isAuthenticated().user && auth.isAuthenticated().user._id == user._id ) ?
+				{( auth.isAuthenticated().user && auth.isAuthenticated().user._id === user._id ) ?
 					(<ListItemSecondaryAction>
 						<Link to={"/user/edit/" + user._id}>
 							<IconButton aria-label="Edit" color="primary">
@@ -112,7 +131,9 @@ export default function Profile({ match }) {
 						</Link>
 						<DeleteUser userId={user._id}/>
 					</ListItemSecondaryAction>)
-					:(<ListItemSecondaryAction></ListItemSecondaryAction>)
+					:(<ListItemSecondaryAction>
+						<FollowProfileButton following={following} onButtonClick={clickFollowButton}/>
+					</ListItemSecondaryAction>)
 				}
 				</ListItem>
 				<Divider/>

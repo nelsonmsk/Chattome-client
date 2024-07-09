@@ -19,7 +19,6 @@ import Comments from './Comments';
 const useStyles = makeStyles(theme => ({
   root: {
 	height: '100%',
-	minHeight: 'calc(100vh - 123px)',
 	alignItems: 'center',
 	justifyContent: 'center',
 	padding: '0px !important',
@@ -29,26 +28,54 @@ const useStyles = makeStyles(theme => ({
 		padding:`${theme.spacing(3)}px ${theme.spacing(2.5)}px ${theme.spacing(2)}px`,
 		color: theme.palette.openTitle,
 	},
+	cardHeader: {
+		padding:`${theme.spacing(3)}px ${theme.spacing(2.5)}px ${theme.spacing(2)}px`,
+		color: theme.palette.openTitle,
+		backgroundColor: 'skyblue'
+	},
+	cardContent: {
+		padding: '10px',
+		color: theme.palette.openTitle,
+		backgroundColor: 'lightgray'
+	},
+	CardActions: {
+		padding:`${theme.spacing(3)}px ${theme.spacing(2.5)}px ${theme.spacing(2)}px`,
+		color: theme.palette.openTitle,
+		backgroundColor: 'yellow'
+	},
+	buttons: {
+		padding:`${theme.spacing(3)}px ${theme.spacing(2.5)}px ${theme.spacing(2)}px`,
+		color: theme.palette.openTitle,
+		backgroundColor: 'white',
+		borderRadius: '2px',
+		borderStyle: 'solid'
+	},
 }));
 
 export default function Post(props) {
 	const classes = useStyles();
 	
 	const [values, setValues] = useState({
-		like: checkLike(props.post.likes),
+		like: props.post.likes,
 		likes: props.post.likes.length,
 		comments: props.post.comments
 	});
 
 	const checkLike = (likes) => {
-		const jwt = auth.isAuthenticated;
+		const jwt = auth.isAuthenticated();
 		let match = likes.indexOf(jwt.user._id) !== -1;
 		return match;
 	};
 
+	useEffect(() => {
+		setValues({...values, like: checkLike(props.post.likes)})
+	}, [props.post.likes,values]);
+
+
+
 	const clickLike = () => {
 		let callApi = values.like ? unlike : like;
-		const jwt = auth.isAuthenticated;
+		const jwt = auth.isAuthenticated();
 		callApi({
 			userId: jwt.user._id
 		}, {
@@ -58,14 +85,14 @@ export default function Post(props) {
 				console.log(data.error);
 			} else {
 				setValues({...values, like: !values.like,
-					likes: data.likes.length})
+					likes: data.likes.length});
 			}
 		});
 	};
 
 
 	const deletePost = () => {
-		const jwt = auth.isAuthenticated;		
+		const jwt = auth.isAuthenticated();		
 		remove({
 			postId: props.post._id
 		}, {
@@ -81,19 +108,19 @@ export default function Post(props) {
 
 
 	const updateComments = (comments) => {
-		setValues({...values, comments: comments})
+		setValues({...values, comments: comments});
 	};
 
 	return (
 	<div className={classes.root}>
 		<Card className={classes.card}>
 			<CardHeader avatar={<Avatar src={'/api/users/photo/'+props.post.postedBy._id}/>}
-					action={ props.post.postedBy._id === auth.isAuthenticated().user._id &&
+					action={ props.post.postedBy[0]._id === auth.isAuthenticated().user._id &&
 							<IconButton onClick={deletePost}>
 								<Delete />
 							</IconButton>
 					}
-					title={<Link to={"/user/" + props.post.postedBy._id}>{props.post.postedBy.name}</Link>}
+					title={<Link to={"/user/" + props.post.postedBy[0]._id}>{props.post.postedBy[0].name}</Link>}
 					subheader={(new Date(props.post.created)).toDateString()}
 					className={classes.cardHeader}
 			/>
@@ -103,7 +130,7 @@ export default function Post(props) {
 				</Typography>
 					{props.post.photo &&
 						(<div className={classes.photo}>
-							<img className={classes.media}
+							<img className={classes.media} alt={""}
 								src={'/api/posts/photo/'+ props.post._id}/>
 						</div>)
 					}

@@ -30,10 +30,11 @@ useEffect(() => {
 	list(signal).then((data) => {
 		if (data && data.error) {
 			console.log(data.error);
-		} else {
-			setUsers(data)
+		} else {	
+			setUsers(data);
+			console.log('all users', data);
 		}
-	})
+	});
 	return function cleanup(){
 		abortController.abort();
 	}
@@ -47,7 +48,7 @@ return (
 		<List dense>
 		{users?
 			(users.map((item, i) => {
-				return <Link to={"/user/" + item._id} key={i}>
+				return <Link to={"/users/" + item._id} key={i}>
 					<ListItem button>
 						<ListItemAvatar>
 							<Avatar>

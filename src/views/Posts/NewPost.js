@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Link, Navigate} from 'react-router-dom';
+import {Link, redirect} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -18,11 +18,13 @@ const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(4),
 	height: '100%',
-	minHeight: 'calc(100vh - 123px)',
 	alignItems: 'center',
 	justifyContent: 'center',
-	padding: '0px !important',
+	//padding: '0px !important',
 	marginTop: '24px'
+  },
+  card: {
+	backgroundColor: 'lightGray',
   },
   	title: {
 		padding:`${theme.spacing(3)}px ${theme.spacing(2.5)}px ${theme.spacing(2)}px`,
@@ -60,14 +62,18 @@ const clickPost = () => {
 		if (data && data.error) {
 			setValues({...values, error: data.error});
 		} else {
-			setValues({...values, text:'', photo: ''});
+			setValues({...values, text:'', photo: '', open: true});
 			props.addUpdate(data);
 		}
 	})
 };
 
 if (values.redirectToPost) {
-	return (<Navigate to={'/post/' + values.postId}/>);
+	return redirect('/post/' + values.postId);
+};
+const handleClose=()=>{
+	let url = '/posts/feed/'+ auth.isAuthenticated().user._id; 
+	return redirect(url);
 };
 
 return (
@@ -79,7 +85,7 @@ return (
 				</Typography>
 				<br/>
 				<TextField id="multiline-flexible"label="text" multiline
-					minRows="3" value={values.text} onChange={handleChange('text')}/>
+					minRows="3" onChange={handleChange('text')}/>
 				<br/>
 				<input accept="image/*" type="file"
 					onChange={handleChange('photo')} style={{display:'none'}} id="icon-button-file" />
@@ -103,26 +109,22 @@ return (
 					className={classes.submit}>Submit</Button>
 			</CardActions>
 		</Card>
+		<Dialog open={values.open} onClose={handleClose}>
+			<DialogTitle>New Account</DialogTitle>
+			<DialogContent>
+				<DialogContentText>
+					New account successfully created.
+				</DialogContentText>
+			</DialogContent>
+			<DialogActions>
+					<Button color="primary" autoFocus="autoFocus"
+						variant="contained">
+							Close
+					</Button>
+			</DialogActions>
+		</Dialog>
 	</div>
 );
-
-
-<Dialog open={values.open} disableBackdropClick={true}>
-	<DialogTitle>New Account</DialogTitle>
-	<DialogContent>
-		<DialogContentText>
-			New account successfully created.
-		</DialogContentText>
-	</DialogContent>
-	<DialogActions>
-		<Link to="/signin">
-			<Button color="primary" autoFocus="autoFocus"
-				variant="contained">
-					Sign In
-			</Button>
-		</Link>
-	</DialogActions>
-</Dialog>
 
 };
 

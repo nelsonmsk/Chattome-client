@@ -96,7 +96,7 @@ const comment = async (params, credentials, postId, comment) => {
 			body: JSON.stringify({userId:params.userId, postId: postId,
 				comment: comment})
 		});
-		return await response.json()
+		return await response.json();
 	} catch(err) {
 		console.log(err);
 	}

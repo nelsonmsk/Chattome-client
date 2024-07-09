@@ -19,7 +19,7 @@ export default function FollowProfileButton (props) {
 					: (<Button variant="contained" color="primary"
 						onClick={followClick}>Follow</Button>)
 				}
-			</div>)
+			</div>);
 };
 
 FollowProfileButton.propTypes = {

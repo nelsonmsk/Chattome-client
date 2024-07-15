@@ -1,15 +1,16 @@
 import React, {useState} from 'react';
-import {Link, redirect} from 'react-router-dom';
+import {Link, Navigate} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import CardMedia from '@material-ui/core/CardMedia';
+import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Icon } from '@material-ui/core';
+import { Avatar,Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Icon } from '@material-ui/core';
+import {Camera} from '@material-ui/icons';
 
 import * as auth from  './../Auth/auth-helper';
 import {create} from './api-post';
@@ -26,9 +27,15 @@ const useStyles = makeStyles(theme => ({
   card: {
 	backgroundColor: 'lightGray',
   },
+  CardContent: {
+	backgroundColor: 'white'
+  },
   	title: {
 		padding:`${theme.spacing(3)}px ${theme.spacing(2.5)}px ${theme.spacing(2)}px`,
 		color: theme.palette.openTitle,
+	},
+	postField: {
+	 width: '90%',	
 	},
 }));
 
@@ -49,7 +56,7 @@ const handleChange = name => event => {
 };
 
 const clickPost = () => {
-	const jwt = auth.isAuthenticated;
+	const jwt = auth.isAuthenticated();
 	let postData = new FormData();
 	if(values.text) postData.append('text', values.text);
 	if(values.photo) postData.append('photo', values.photo);
@@ -69,33 +76,35 @@ const clickPost = () => {
 };
 
 if (values.redirectToPost) {
-	return redirect('/post/' + values.postId);
+	return <Navigate to={{pathname: '/post/' + values.postId }}/>;
 };
 const handleClose=()=>{
-	let url = '/posts/feed/'+ auth.isAuthenticated().user._id; 
-	return redirect(url);
+	return <Navigate to={{pathname: '/posts/feed/'+ auth.isAuthenticated().user._id }}/>;
 };
 
 return (
 	<div className={classes.root}>
 		<Card className={classes.card}>
-			<CardContent>
-				<Typography variant="h6" className={classes.title}>
-					New Post
-				</Typography>
-				<br/>
-				<TextField id="multiline-flexible"label="text" multiline
-					minRows="3" onChange={handleChange('text')}/>
+			<CardHeader avatar={<Avatar className={classes.smallAvatar}
+									src= {'/api/users/photo/'+ auth.isAuthenticated().user._id}/>}
+						title={auth.isAuthenticated().user.name}
+						className={classes.cardHeader}>
+			</CardHeader>
+			<CardContent className={classes.CardContent}>
+				<TextField id="multiline-flexible" multiline
+					minRows="3" onChange={handleChange('text')} placeholder={"Share your thoughts..."}
+					className={classes.postField} margin={"normal"}/>
 				<br/>
 				<input accept="image/*" type="file"
 					onChange={handleChange('photo')} style={{display:'none'}} id="icon-button-file" />
 				<label htmlFor="icon-button-file">
 					<Button variant="contained" color="default" component="span">
-						Upload 
+						<Camera/>
 					</Button>
 				</label>
 				<span className={classes.filename}>
-					{values.photo ? values.photo.name : ''}
+					{values.photo ? values.photo.name  : ''}
+				
 				</span>
 				<br/>
 				{
@@ -106,19 +115,19 @@ return (
 			</CardContent>
 			<CardActions>
 				<Button color="primary" variant="contained" onClick={clickPost}
-					className={classes.submit}>Submit</Button>
+					className={classes.submit}>Post</Button>
 			</CardActions>
 		</Card>
 		<Dialog open={values.open} onClose={handleClose}>
-			<DialogTitle>New Account</DialogTitle>
+			<DialogTitle>New Post</DialogTitle>
 			<DialogContent>
 				<DialogContentText>
-					New account successfully created.
+					Post Created Successfully.
 				</DialogContentText>
 			</DialogContent>
 			<DialogActions>
 					<Button color="primary" autoFocus="autoFocus"
-						variant="contained">
+						variant="contained" onClick={handleClose}>
 							Close
 					</Button>
 			</DialogActions>

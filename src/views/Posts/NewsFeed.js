@@ -68,12 +68,12 @@ const classes = useStyles();
 	};
 
 	if (redirectToSignin) {
-		return redirect('/signin');
+		return <Navigate to={{pathname: '/signin' }}/>;
 	};
 	
 	return (
 		<Paper className={classes.root} elevation={4}>
-			<Typography variant="h2" className={classes.title}>
+			<Typography variant="h4" className={classes.title}>
 				NewsFeed
 			</Typography>
 			<Card>

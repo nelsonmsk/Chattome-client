@@ -27,6 +27,7 @@ const useStyles = makeStyles(theme => ({
   card: {
 	height: '100%',
 	margin: '10px',
+	backgroundColor: '#e0e0e0'
   },
   CardHeader: {
 	padding: '10px',
@@ -42,16 +43,17 @@ const useStyles = makeStyles(theme => ({
   commentDate: {
 	marginRight: '10px',
 	marginLeft: '10px',
+	color: '#2e355b',
   },
   commentText: {
-	margin: '5px',
-	padding: '5px',
+	margin: '0px',
+	padding: '2px',
   },
   commentDelete: {
 	marginLeft: '10px',
   }, 
   commentField: {
-	width: '80%',
+	width: '90%',
   },
 }));
 

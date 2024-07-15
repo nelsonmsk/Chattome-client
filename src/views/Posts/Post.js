@@ -28,20 +28,23 @@ const useStyles = makeStyles(theme => ({
 		padding:`${theme.spacing(3)}px ${theme.spacing(2.5)}px ${theme.spacing(2)}px`,
 		color: theme.palette.openTitle,
 	},
+	card: {
+		borderRadius: '15px',
+		margin: '0rem 15px',
+	},
 	cardHeader: {
 		padding:`${theme.spacing(3)}px ${theme.spacing(2.5)}px ${theme.spacing(2)}px`,
 		color: theme.palette.openTitle,
-		backgroundColor: 'skyblue'
+		backgroundColor: 'lightGray'
 	},
 	cardContent: {
-		padding: '10px',
+		padding: '2%',
 		color: theme.palette.openTitle,
-		backgroundColor: 'lightgray'
+		border: '1px groove'
 	},
 	CardActions: {
-		padding:`${theme.spacing(3)}px ${theme.spacing(2.5)}px ${theme.spacing(2)}px`,
+		padding: '0px',
 		color: theme.palette.openTitle,
-		backgroundColor: 'yellow'
 	},
 	buttons: {
 		padding:`${theme.spacing(3)}px ${theme.spacing(2.5)}px ${theme.spacing(2)}px`,
@@ -50,6 +53,25 @@ const useStyles = makeStyles(theme => ({
 		borderRadius: '2px',
 		borderStyle: 'solid'
 	},
+	media: {
+		maxWidth: '100%',
+		height: '100%',
+	},
+	photo: {
+		"@media screen and (max-width: 568px)": {
+			width: '100%',
+			height: '320px',
+		},
+		"@media screen and (max-width: 1280px) and (min-width: 980px)": {
+			width: '100%',
+			height: '600px',
+		},
+		"@media screen and (max-width: 2560px) and (min-width: 1300px)": {
+			width: '90%',
+			height: '600px',
+		},
+		marginTop: '1rem'
+	}
 }));
 
 export default function Post(props) {
@@ -92,13 +114,14 @@ export default function Post(props) {
 
 
 	const deletePost = () => {
-		const jwt = auth.isAuthenticated();		
+		const jwt = auth.isAuthenticated();	
+		console.log('post id',props.post._id);	
 		remove({
-			postId: props.post._id
+			userId: jwt.user._id
 		}, {
 			t: jwt.token
-		}).then((data) => {
-			if (data.error) {
+		},props.post._id, props.post).then((data) => {
+			if (data && data.error) {
 				console.log(data.error);
 			} else {
 				props.onRemove(props.post);
@@ -135,7 +158,7 @@ export default function Post(props) {
 						</div>)
 					}
 			</CardContent>
-			<CardActions>
+			<CardActions className={classes.CardActions}>
 				{ values.like
 					? <IconButton onClick={clickLike} className={classes.button}
 						aria-label="Like" color="secondary">

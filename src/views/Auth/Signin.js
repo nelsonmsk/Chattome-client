@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import {Link, Navigate, redirect,useLocation} from 'react-router-dom';
+import {Link, Navigate, redirect} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -206,6 +206,7 @@ export default function Signin(props) {
 												}
 		}));
 	};
+
 	const hasError = field => {
     if ( formState.touched[field] && formState.errors[field]) {
         return true;
@@ -213,6 +214,18 @@ export default function Signin(props) {
       return false;	
     }
   };
+
+	const {from} = props.location  || {
+		from: {
+			pathname: '/'
+		}
+	};
+	
+  const navigateUser = ()=>{
+    let url =  "'"+ from.pathname+"'";
+		return <Navigate to={{pathname: url }}/>;
+	};
+
 	const clickSubmit = (event) => {
     event.preventDefault();
 		const user = {
@@ -229,23 +242,16 @@ export default function Signin(props) {
 				});
 			}
 		});
+    if(formState.redirectToReferrer === true){
+     //console.log('here'); 
+      <Navigate to={{pathname: '/users' }}/>;
+    }
 	};
-	const handleSignIn = event => {
-		event.preventDefault();
-		return redirect('/');
-	};	
-	//const location = useLocation();
-	const {from} = props.location  || {
-		from: {
-			pathname: '/'
-		}
-	};
-	
-	const {redirectToReferrer} = formState.redirectToReferrer;
-	
-    if (redirectToReferrer) {
-		return redirect('/');
-	};
+
+const handleSignIn =()=>{
+  return <Navigate to={{pathname: '/' }}/>;
+}
+
 	
 return (
 	<div className={classes.root}>

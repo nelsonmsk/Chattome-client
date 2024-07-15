@@ -1,12 +1,17 @@
-import React from 'react';
-import { Route, Navigate } from 'react-router-dom';
+import React,{Component} from 'react';
+import { Navigate, Route } from 'react-router-dom';
 import * as auth from './auth-helper';
+import EditProfile from '../Users/EditProfile';
+import Signin from './Signin';
 
 
-const PrivateRoute = (props) => {
-	auth.isAuthenticated ?
-	(<Route path={props.path} element={props.element }/>)
-	:
-	(<Navigate to={'/signin'}/>)
+
+const PrivateRoute = ( props ) => { 
+		return (auth.isAuthenticated() ? (
+					props.element
+				) : (
+					<Navigate to={{pathname: '/signin' }}/>
+				)
+			);
 };
 export default PrivateRoute;

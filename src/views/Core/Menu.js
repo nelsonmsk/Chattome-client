@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, useLocation, Navigate, useNavigate} from 'react-router-dom';
+import {Link, useLocation, Navigate,} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles'
 import { AppBar, Toolbar, IconButton,Button } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
@@ -44,6 +44,12 @@ return(
 			</span>)
 			:			  
 			(<span> 
+				<Link to={"/posts/feed/" + auth.isAuthenticated().user._id}  className={classes.links} >
+					<Button style={IsActive("/posts/feed/" + auth.isAuthenticated().user._id)}> NewsFeed </Button>
+				</Link>
+				<Link to={"/users/findpeople/" + auth.isAuthenticated().user._id}  className={classes.links} >
+					<Button style={IsActive("/users/findpeople/" + auth.isAuthenticated().user._id)}> Find People </Button>
+				</Link>
 				<Link to="/users" className={classes.links} >
 					<Button style={IsActive( "/users")}>Users</Button>
 				</Link>
@@ -53,14 +59,8 @@ return(
 						My Profile
 					</Button>
 				</Link>
-				<Link to={"/users/findpeople/" + auth.isAuthenticated().user._id}  className={classes.links} >
-					<Button style={IsActive("/users/findpeople/" + auth.isAuthenticated().user._id)}> Find People </Button>
-				</Link>
-				<Link to={"/posts/feed/" + auth.isAuthenticated().user._id}  className={classes.links} >
-					<Button style={IsActive("/posts/feed/" + auth.isAuthenticated().user._id)}> NewsFeed </Button>
-				</Link>
 				<Button color="inherit"
-					onClick={() => { auth.clearJWT(() =>Navigate('/')) }}>
+					onClick={() => { auth.clearJWT(() =><Navigate to={{pathname: '/signin' }}/>) }}>
 						Sign out
 				</Button>
 			</span>)

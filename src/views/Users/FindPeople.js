@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Link, Navigate, redirect} from 'react-router-dom';
+import {Link, Navigate} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -7,7 +7,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import {Snackbar, Divider, List, ListItem, ListItemAvatar, Avatar, ListItemSecondaryAction, ListItemText, IconButton, Button, } from '@material-ui/core';
-import {ViewCarousel} from '@material-ui/icons';
+import {PanoramaFishEye} from '@material-ui/icons';
 
 import * as auth from  './../Auth/auth-helper';
 import {findPeople,follow} from './api-user';
@@ -15,10 +15,16 @@ import {findPeople,follow} from './api-user';
 const useStyles = makeStyles(theme => ({
   root: {
 	height: '100%',
+	minHeight: 'calc(100vh - 123px)',
 	alignItems: 'center',
 	justifyContent: 'center',
 	padding: '0px !important',
-  }
+  },
+  title: {
+	padding:`${theme.spacing(3)}px ${theme.spacing(2.5)}px ${theme.spacing(2)}px`,
+	color: theme.palette.openTitle,
+	border: '1px groove'
+},
 }));
 
 export default function FindPeople({ match }) {
@@ -28,12 +34,11 @@ export default function FindPeople({ match }) {
 		open: false,
 		followMessage: ''
 	});
-	const jwt = auth.isAuthenticated();
 
 	useEffect(() => {
 		const abortController = new AbortController();
 		const signal = abortController.signal;
-		
+		const jwt = auth.isAuthenticated();
 		findPeople({
 			userId: jwt.user._id
 		}, {
@@ -42,15 +47,16 @@ export default function FindPeople({ match }) {
 			if (data && data.error) {
 				console.log(data.error);
 			} else {
-				setValues({...values, users:data})
+				setValues({...values, users:data});
 			}
 		});
 		return function cleanup(){
 			abortController.abort();
-		}
-	}, [jwt, values]);
+		};
+	},[]);
 
 	const clickFollow = (user, index) => {
+		const jwt = auth.isAuthenticated();
 		follow({
 			userId: jwt.user._id
 		}, {
@@ -68,12 +74,12 @@ export default function FindPeople({ match }) {
 	};
 	
 	const handleRequestClose =()=>{
-		return redirect('/');
+		return <Navigate to={{pathname: '/' }}/>;
 	};	
 	
 	return (
 		<Paper className={classes.root} elevation={4}>
-			<Typography variant="h6" className={classes.title}>
+			<Typography variant="h4" className={classes.title}>
 				Who to follow
 			</Typography>
 			<List>
@@ -89,7 +95,7 @@ export default function FindPeople({ match }) {
 								<Link to={"/user/" + item._id}>
 									<IconButton variant={"contained"} color={"secondary"}
 										className={classes.viewButton}>
-										<ViewCarousel/>
+										<PanoramaFishEye/>
 									</IconButton>
 								</Link>
 								<Button aria-label={"Follow"} variant={"contained"}
@@ -113,7 +119,7 @@ export default function FindPeople({ match }) {
 					</span>	
 				)
 			}
-				if(values.followMessage){
+				{values.followMessage &&
 					<Snackbar anchorOrigin={{vertical: 'bottom',
 												horizontal: 'right',}}
 										open={values.open}

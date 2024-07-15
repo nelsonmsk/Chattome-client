@@ -15,8 +15,12 @@ const useStyles = makeStyles(theme => ({
 	minHeight: 'calc(100vh - 123px)',
 	alignItems: 'center',
 	justifyContent: 'center',
-	padding: '0px !important',
-  }
+  },
+  title: {
+	padding:`${theme.spacing(3)}px ${theme.spacing(2.5)}px ${theme.spacing(2)}px`,
+	color: theme.palette.openTitle,
+	border: '1px groove'
+  },
 }));
 
 export default function Users() {
@@ -42,7 +46,7 @@ useEffect(() => {
 
 return (
 	<Paper className={classes.root} elevation={4}>
-		<Typography variant="h6" className={classes.title}>
+		<Typography variant="h4" className={classes.title}>
 			All Users
 		</Typography>
 		<List dense>

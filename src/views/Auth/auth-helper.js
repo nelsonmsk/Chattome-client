@@ -1,3 +1,4 @@
+import { signout } from './api-auth';
 
 export const authenticate = (jwt,cb) => {
 	if(typeof window !== "undefined"){
@@ -18,7 +19,7 @@ export const isAuthenticated = () => {
 };
 
 
-export const clearJWT = (cb,signout) =>{
+export const clearJWT = (cb) =>{
 	if(typeof window !== "undefined"){
 		localStorage.removeItem('jwt');
 		cb();

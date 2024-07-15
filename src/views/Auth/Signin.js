@@ -244,7 +244,7 @@ export default function Signin(props) {
 		});
     if(formState.redirectToReferrer === true){
      //console.log('here'); 
-      <Navigate to={{pathname: '/users' }}/>;
+      return <Navigate to={{pathname: '/users' }}/>;
     }
 	};
 

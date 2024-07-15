@@ -53,49 +53,49 @@ export default function Profile({ match }) {
 	const [following, setFollowing] = useState(false);
 	const [value, setValue] = useState(0);
 	const {userId} = useParams();
-	
+
+	const checkFollow = (user) => {
+		const jwt = auth.isAuthenticated();
+		const match = user.followers.some((follower)=> {
+			return follower._id === jwt.user._id
+		});
+		return match;
+	};
+
+	const loadPosts = (userId) => {
+		const jwt = auth.isAuthenticated();
+		listByUser({
+			userId: userId
+		}, {
+			t: jwt.token
+		}).then((data) => {
+			if (data && data.error) {
+				console.log(data.error);
+			} else {
+				setPosts(data);
+			}
+		});
+	}; 
+
 	useEffect(() => {
 		const abortController = new AbortController();
 		const signal = abortController.signal;
 		const jwt = auth.isAuthenticated();
-		const userId = jwt.user._id;
-		console.log('userId:',userId);
-		//let follow = true;
+
 		read({
 			userId: userId
 		}, {t: jwt.token}, signal).then((data) => {
 			if (data && data.error) {
 				setRedirectToSignin(true);
 			} else {
-				console.log('user-read:', data);
 				setUser(data);		
-				setFollowing(true);
+				let followStatus = checkFollow(data);
+				setFollowing(followStatus);
+				loadPosts(userId);
 			}
 		});
-	}, []);  
+	}, [userId]);  
 
-
-	useEffect(() => {
-		const abortController = new AbortController();
-		const signal = abortController.signal;
-		const jwt = auth.isAuthenticated();
-
-		listByUser({
-			userId: userId
-		}, {
-			t: jwt.token
-		},signal).then((data) => {
-			if (data && data.error) {
-				console.log(data.error);
-			} else {
-				console.log('posts-data-By-user:',data);
-				setPosts(data);
-			}
-		});
-		return function cleanup(){
-			abortController.abort();
-		};
-	}, []); 
 
 	const clickFollowButton = (callApi) => {
 		const jwt = auth.isAuthenticated();

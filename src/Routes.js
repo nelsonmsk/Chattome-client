@@ -24,8 +24,7 @@ const MainRouter = () => {
 			<Route path="/users/edit/:userId" element={<PrivateRoute path={"/users/edit/:userId"} element={<EditProfile />} /> } />
 			<Route path="/users/:userId" element={<Profile />} />
 			<Route path="/users/findpeople/:userId" element={<PrivateRoute path={"/users/findpeople/:userId"} element={<FindPeople />} /> } />
-			<Route path="/posts/feed/:userId" element={<PrivateRoute path={"/posts/feed/:userId"} element={<NewsFeed />} /> } />
-			
+			<Route path="/posts/feed/:userId" element={<PrivateRoute path={"/posts/feed/:userId"} element={<NewsFeed />} /> } />		
 		</Routes>
 		<Footer/>
 	</div>   

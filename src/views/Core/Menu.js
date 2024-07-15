@@ -60,7 +60,7 @@ return(
 					</Button>
 				</Link>
 				<Button color="inherit"
-					onClick={() => { auth.clearJWT(() =><Navigate to={{pathname: '/signin' }}/>) }}>
+					onClick={() => { auth.clearJWT(() =><Navigate to={{pathname: '/signin' }}/>); }}>
 						Sign out
 				</Button>
 			</span>)

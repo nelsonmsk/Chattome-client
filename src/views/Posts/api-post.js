@@ -124,11 +124,11 @@ const listNewsFeed = async (params, credentials, signal) => {
 	}
 };
 
-const listByUser = async (params, credentials, signal) => {
+const listByUser = async (params, credentials) => {
 	try {
 		let response = await fetch('/api/posts/by/'+ params.userId, {
 			method: 'GET',
-			signal: signal,
+			//signal: signal,
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json',

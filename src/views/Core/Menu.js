@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, useLocation, Navigate,} from 'react-router-dom';
+import {Link, useLocation, useNavigate,} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles'
 import { AppBar, Toolbar, IconButton,Button } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
@@ -18,9 +18,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export const Menu = withRouter(() => {
-	
 const classes = useStyles();
-
+const navigate = useNavigate();
 return(
 	<AppBar position="static">
 		<Toolbar>
@@ -60,7 +59,7 @@ return(
 					</Button>
 				</Link>
 				<Button color="inherit"
-					onClick={() => { auth.clearJWT(() =><Navigate to={{pathname: '/signin' }}/>); }}>
+					onClick={() => { auth.clearJWT(() =>navigate('/signin') ); }}>
 						Sign out
 				</Button>
 			</span>)

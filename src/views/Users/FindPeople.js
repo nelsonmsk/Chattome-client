@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Link, Navigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -29,6 +29,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function FindPeople({ match }) {
 	const classes = useStyles();
+	const navigate = useNavigate();
 	const [values, setValues] = useState({
 		users: '',
 		open: false,
@@ -47,7 +48,7 @@ export default function FindPeople({ match }) {
 			if (data && data.error) {
 				console.log(data.error);
 			} else {
-				setValues({...values, users:data});
+				setValues(v =>({users : data}));
 			}
 		});
 		return function cleanup(){
@@ -74,7 +75,7 @@ export default function FindPeople({ match }) {
 	};
 	
 	const handleRequestClose =()=>{
-		return <Navigate to={{pathname: '/' }}/>;
+		return navigate('/');
 	};	
 	
 	return (

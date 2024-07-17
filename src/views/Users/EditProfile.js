@@ -1,5 +1,5 @@
 import React, {useState}from 'react';
-import {Link,  Navigate} from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 export default function EditProfile({ match }) {
 
 	const classes = useStyles();
-
+	const navigate = useNavigate();
 	const [values, setValues] = useState({
 		name: '',
 		password: '',
@@ -35,6 +35,7 @@ export default function EditProfile({ match }) {
 		redirectToProfile: false,
 		error: ''
 	});
+	const {userId} = useParams();
 
 	const handleChange = name => event => {
 		const value = name === 'photo'? event.target.files[0]: event.target.value;
@@ -51,7 +52,7 @@ export default function EditProfile({ match }) {
 		if(values.photo) userData.append('photo', values.photo);
 
 		update({
-			userId: match.params.userId
+			userId: userId
 		}, {
 			t: jwt.token
 		}, userData).then((data) => {
@@ -60,12 +61,13 @@ export default function EditProfile({ match }) {
 			} else {
 					setValues({...values, userId: data._id, redirectToProfile: true});
 			}
+			//navigate('/users/'+ userId);
 		})
 	};
 
-	if (values.redirectToProfile) {
-		return (<Navigate to={'/users/' + values.userId}/>);
-	};
+	const handleClose=()=>{
+		navigate('/users/'+userId);
+	}
 
 return (
 	<><div className={classes.root}>
@@ -110,18 +112,18 @@ return (
 					className={classes.submit}>Submit</Button>
 			</CardActions>
 		</Card>
-	</div><Dialog open={values.open} disableBackdropClick={true}>
-			<DialogTitle>New Account</DialogTitle>
+	</div><Dialog open={values.open} onClose={handleClose}>
+			<DialogTitle>Profile Account</DialogTitle>
 			<DialogContent>
 				<DialogContentText>
-					New account successfully created.
+					Profile successfully Updated!.
 				</DialogContentText>
 			</DialogContent>
 			<DialogActions>
 				<Link to="/signin">
 					<Button color="primary" autoFocus="autoFocus"
-						variant="contained">
-						Sign In
+						variant="contained" onClick={handleClose}>
+						Close
 					</Button>
 				</Link>
 			</DialogActions>

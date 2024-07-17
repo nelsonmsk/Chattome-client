@@ -32,7 +32,6 @@ export default function NewsFeed() {
 	
 const classes = useStyles();
 	const [posts, setPosts] = useState([]); 
-	
 	const [redirectToSignin, setRedirectToSignin] = useState(false);
 	
 	useEffect(() => {

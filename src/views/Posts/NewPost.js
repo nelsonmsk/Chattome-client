@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Link, Navigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -40,8 +40,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function NewPost(props) {
-	
 const classes = useStyles();
+const navigate = useNavigate();
 const [values, setValues] = useState({
 	text: '',
 	photo: '',
@@ -72,14 +72,12 @@ const clickPost = () => {
 			setValues({...values, text:'', photo: '', open: true});
 			props.addUpdate(data);
 		}
+		navigate('/post/feed/' + jwt.user._id);
 	})
 };
 
-if (values.redirectToPost) {
-	return <Navigate to={{pathname: '/post/' + values.postId }}/>;
-};
 const handleClose=()=>{
-	return <Navigate to={{pathname: '/posts/feed/'+ auth.isAuthenticated().user._id }}/>;
+	return navigate('/posts/feed/'+ auth.isAuthenticated().user._id);
 };
 
 return (

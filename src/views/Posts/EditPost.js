@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, Navigate} from 'react-router-dom';
+import {Link, Navigate, useNavigate} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -31,8 +31,8 @@ const useStyles = makeStyles(theme => ({
 
 
 export default function EditProfile() {
-	
 const classes = useStyles();
+const navigate = useNavigate();
 const [values, setValues] = useState({
 	text: '',
 	photo: '',
@@ -47,8 +47,8 @@ const handleChange = name => event => {
 };
 
 const clickSubmit = () => {
-	const jwt = auth.isAuthenticated(),
-	let postData = new FormData(),
+	const jwt = auth.isAuthenticated();
+	let postData = new FormData();
 	if(values.text) postData.append('text', values.text);
 	if(values.photo) postData.append('photo', values.photo);
 
@@ -62,11 +62,8 @@ const clickSubmit = () => {
 		} else {
 			setValues({...values, redirectToProfile: true});
 		}
+		navigate('/users/'+ values.user.id);
 	})
-};
-
-if (values.redirectToProfile) {
-	return (<Navigate to={'/user/' + values.userId}/>);
 };
 
 return (

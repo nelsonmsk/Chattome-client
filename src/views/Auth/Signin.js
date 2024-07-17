@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import {Link, Navigate, redirect} from 'react-router-dom';
+import {Link, useNavigate, redirect} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -167,6 +167,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Signin(props) {
 	const classes = useStyles();
+  const navigate = useNavigate();
 	const [formState, setFormState] = useState({
 		isValid: false,
 		values: {},
@@ -221,10 +222,7 @@ export default function Signin(props) {
 		}
 	};
 	
-  const navigateUser = ()=>{
-    let url =  "'"+ from.pathname+"'";
-		return <Navigate to={{pathname: url }}/>;
-	};
+ 
 
 	const clickSubmit = (event) => {
     event.preventDefault();
@@ -240,16 +238,13 @@ export default function Signin(props) {
 				auth.authenticate(data, () => {
 					setFormState({...formState, errors:'',redirectToReferrer: true });
 				});
+      navigate('/');
 			}
 		});
-    if(formState.redirectToReferrer === true){
-     //console.log('here'); 
-      return <Navigate to={{pathname: '/users' }}/>;
-    }
 	};
 
 const handleSignIn =()=>{
-  return <Navigate to={{pathname: '/' }}/>;
+  return navigate('/' );
 }
 
 	

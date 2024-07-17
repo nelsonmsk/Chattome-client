@@ -1,12 +1,11 @@
 import React,{useState,useEffect} from 'react';
-import {Link, useNavigate, redirect} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import {Grid,Button,Icon,IconButton,} from '@material-ui/core';
+import {Grid,Button,Snackbar} from '@material-ui/core';
 import loginImg from './../../assets/images/login.jpeg';
 import { Facebook as FacebookIcon, Google as GoogleIcon } from './../../icons';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Schema from 'validate';
 
 import * as auth from  './auth-helper';
@@ -173,6 +172,8 @@ export default function Signin(props) {
 		values: {},
 		touched: {},
 		errors: {},
+    open: false,
+    failureMessage: "",
 		redirectToReferrer: false
 	});	
 
@@ -216,14 +217,6 @@ export default function Signin(props) {
     }
   };
 
-	const {from} = props.location  || {
-		from: {
-			pathname: '/'
-		}
-	};
-	
- 
-
 	const clickSubmit = (event) => {
     event.preventDefault();
 		const user = {
@@ -233,7 +226,7 @@ export default function Signin(props) {
 		};
 		signin(user).then((data) => {
 			if (data.error) {
-				setFormState({...formState, errors:data.error});
+				setFormState({...formState, errors:data.error, open:true, failureMessage: "Login Failed, Please verify your email or password"});
 			} else {
 				auth.authenticate(data, () => {
 					setFormState({...formState, errors:'',redirectToReferrer: true });
@@ -245,8 +238,11 @@ export default function Signin(props) {
 
 const handleSignIn =()=>{
   return navigate('/' );
-}
+};
 
+const hidefailureMessage=()=>{
+  setFormState({...formState, open:false, failureMessage: ''});
+}
 	
 return (
 	<div className={classes.root}>
@@ -386,7 +382,14 @@ return (
             </div>
           </div>
         </Grid>
-        
+        {formState.failureMessage &&
+					<Snackbar anchorOrigin={{vertical: 'top',
+												horizontal: 'right',}}
+										open={formState.open}
+                    onClose={hidefailureMessage}
+										autoHideDuration={5000}
+										message={<span className={classes.snack}>{formState.failureMessage}</span>}/>
+				}
 	</div>
 				
 )	

@@ -21,7 +21,6 @@ const useStyles = makeStyles(theme => ({
 	height: '100%',
 	alignItems: 'center',
 	justifyContent: 'center',
-	//padding: '0px !important',
 	marginTop: '24px'
   },
   card: {

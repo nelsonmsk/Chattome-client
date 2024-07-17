@@ -14,8 +14,7 @@ import * as auth from  './../Auth/auth-helper';
 import PostList from './../Posts/PostList';
 import {read} from './api-user';
 import {listByUser} from './../Posts/api-post';
-import DeleteUser from './DeleteUser';
-//import ProfileTabs from './ProfileTabs'; 
+import DeleteUser from './DeleteUser'; 
 import FollowProfileButton from './FollowProfileButton';
 import FollowGrid from './FollowGrid';
 
@@ -154,7 +153,7 @@ export default function Profile({ match }) {
 					<ListItemText primary={user.name} secondary={user.email}/>
 				{( auth.isAuthenticated().user && auth.isAuthenticated().user._id === user._id ) ?
 					(<ListItemSecondaryAction>
-						<Link to={"/user/edit/" + user._id}>
+						<Link to={"/users/edit/" + user._id}>
 							<IconButton aria-label="Edit" color="primary">
 								<Edit/>
 							</IconButton>

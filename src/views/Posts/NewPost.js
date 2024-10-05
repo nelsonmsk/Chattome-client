@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -21,7 +21,6 @@ const useStyles = makeStyles(theme => ({
 	height: '100%',
 	alignItems: 'center',
 	justifyContent: 'center',
-	marginTop: '24px'
   },
   card: {
 	backgroundColor: 'lightGray',
@@ -68,15 +67,14 @@ const clickPost = () => {
 		if (data && data.error) {
 			setValues({...values, error: data.error});
 		} else {
-			setValues({...values, text:'', photo: '', open: true});
+			setValues({...values, text:'', photo: '', open: true, postId:data._id});
 			props.addUpdate(data);
 		}
-		navigate('/post/feed/' + jwt.user._id);
 	})
 };
 
 const handleClose=()=>{
-	return navigate('/posts/feed/'+ auth.isAuthenticated().user._id);
+	 navigate('/posts/'+ values.postId);
 };
 
 return (

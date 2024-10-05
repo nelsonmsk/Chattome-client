@@ -23,14 +23,14 @@ const useStyles = makeStyles(theme => ({
 export default function PostList (props) {
 	
 	const classes = useStyles();
-		
-	console.log('props.posts:  ',props.posts);
 	return (
 		<div className={classes.root}>
 			{props.posts?
 				(props.posts.map((item, i) => {
-					return <Post post={item} key={i}
-						onRemove={props.removeUpdate}/>
+					return <Link to={"/posts/" + item._id} style={{textDecoration:'none', border:'none'}}>
+								<Post post={item} key={i}
+									onRemove={props.removeUpdate}/>
+							</Link>
 					})
 				):(
 					<Typography variant="h4" className={classes.title}>

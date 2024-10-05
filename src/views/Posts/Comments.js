@@ -6,16 +6,12 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import {Avatar, Icon, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
+import {Avatar, Icon} from '@material-ui/core';
 import {Delete} from '@material-ui/icons';
 
 import * as auth from  './../Auth/auth-helper';
-import {remove, comment, uncomment, like, unlike } from './api-post';
-import { ImportContacts } from '@material-ui/icons';
+import {comment, uncomment } from './api-post';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   card: {
 	height: '100%',
 	margin: '10px',
-	backgroundColor: '#e0e0e0'
+	backgroundColor: '#ffffff'
   },
   CardHeader: {
 	padding: '10px',
@@ -55,6 +51,9 @@ const useStyles = makeStyles(theme => ({
   commentField: {
 	width: '90%',
   },
+  text:{
+	fontSize: '80%'
+  }
 }));
 
 export default function Comments(props) {
@@ -84,7 +83,7 @@ export default function Comments(props) {
 	const commentBody = item => {
 		return (
 			<p className={classes.commentText}>
-				<Link to={"/users/" + item.postedBy._id}>
+				<Link to={"/users/" + item.postedBy._id} style={{textDecoration:'none'}}>
 					{item.postedBy.name} </Link><br/>
 				{item.text} |
 				<span className={classes.commentDate}> 
@@ -132,7 +131,7 @@ export default function Comments(props) {
 					return <CardHeader avatar={<Avatar className={classes.smallAvatar}
 										src={'/api/users/photo/'+item.postedBy._id}/>}
 										title={commentBody(item)}
-										className={classes.cardSubHeader}
+										classes={{root:classes.CardHeader, title:classes.text}}
 										key={i}>
 							</CardHeader>
 					})

@@ -8,6 +8,7 @@ import Profile from './views/Users/Profile';
 import EditProfile from './views/Users/EditProfile';
 import FindPeople from './views/Users/FindPeople';
 import NewsFeed from './views/Posts/NewsFeed';
+import PostView from './views/Posts/PostView';
 import {MenuBar} from './views/Core/Menu';
 import Footer from './views/Core/Footer';
 import PrivateRoute from './views/Auth/PrivateRoute';
@@ -24,7 +25,8 @@ const MainRouter = () => {
 			<Route path="/users/edit/:userId" element={<PrivateRoute path={"/users/edit/:userId"} element={<EditProfile />} /> } />
 			<Route path="/users/:userId" element={<PrivateRoute path={"/users/:userId"} element={<Profile />} /> } />
 			<Route path="/users/findpeople/:userId" element={<PrivateRoute path={"/users/findpeople/:userId"} element={<FindPeople />} /> } />
-			<Route path="/posts/feed/:userId" element={<PrivateRoute path={"/posts/feed/:userId"} element={<NewsFeed />} /> } />		
+			<Route path="/posts/feed/:userId" element={<PrivateRoute path={"/posts/feed/:userId"} element={<NewsFeed />} /> } />
+			<Route path="/posts/:postId" element={<PrivateRoute path={"/posts/:postId"} element={<PostView />} /> } />			
 		</Routes>
 		<Footer/>
 	</div>   

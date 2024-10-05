@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 
 import * as auth from './../Auth/auth-helper';
 import withRouter from './withRouter';
+import { Chat } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
   	title: {
@@ -57,11 +58,11 @@ export const MenuBar = withRouter(() => {
 			return {color: '#ff4081'};
 		}else{
 			if(screenWidth && screenWidth > 992){
-				return {color: '#ffffff'};
+				return {color: '#fafafa'};
 			}else if(screenWidth && screenWidth < 992){
 				return {color: '#3f4771'};
 			}else{
-				return {color: '#cccccc'};
+				return {color: '#fafafa'};
 			}
 		}
 	};
@@ -131,7 +132,7 @@ return(
 	<AppBar position="static">
 		<Toolbar className={classes.toolbar_lg}>
 			<Typography variant="h6" color="inherit" className={classes.title}>
-				Chattome
+				Chattome <Chat/>
 			</Typography>
 			<Link to="/" >
 				<IconButton aria-label="Home" style={IsActive("/")}>

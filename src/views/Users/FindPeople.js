@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import {Snackbar, Divider, List, ListItem, ListItemAvatar, Avatar, ListItemSecondaryAction, ListItemText, IconButton, Button, } from '@material-ui/core';
+import {Snackbar, List, ListItem, ListItemAvatar, Avatar, ListItemSecondaryAction, ListItemText, IconButton, Button, } from '@material-ui/core';
 import {PanoramaFishEye} from '@material-ui/icons';
 
 import * as auth from  './../Auth/auth-helper';
@@ -93,7 +90,7 @@ export default function FindPeople({ match }) {
 							</ListItemAvatar>
 							<ListItemText primary={item.name}/>
 							<ListItemSecondaryAction className={classes.follow}>
-								<Link to={"/user/" + item._id}>
+								<Link to={"/users/" + item._id}>
 									<IconButton variant={"contained"} color={"secondary"}
 										className={classes.viewButton}>
 										<PanoramaFishEye/>
